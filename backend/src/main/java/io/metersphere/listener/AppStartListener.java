@@ -65,6 +65,8 @@ public class AppStartListener implements ApplicationListener<ApplicationReadyEve
     private TestReviewTestCaseService testReviewTestCaseService;
     @Resource
     private MockConfigService mockConfigService;
+    @Resource
+    private CustomFieldResourceService customFieldResourceService;
 
     @Value("${jmeter.home}")
     private String jmeterHome;
@@ -155,6 +157,7 @@ public class AppStartListener implements ApplicationListener<ApplicationReadyEve
         initOnceOperate(testReviewTestCaseService::initOrderField, "init.sort.review.test.case");
         initOnceOperate(apiDefinitionService::initDefaultModuleId, "init.default.module.id");
         initOnceOperate(mockConfigService::initExpectNum, "init.mock.expectNum");
+        initOnceOperate(customFieldResourceService::compatibleData, "init.custom.field.resource");
     }
 
     /**

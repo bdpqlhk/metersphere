@@ -2,6 +2,7 @@ package io.metersphere.base.mapper.ext;
 
 import io.metersphere.base.domain.Issues;
 import io.metersphere.base.domain.IssuesDao;
+import io.metersphere.track.dto.CustomFieldResourceCompatibleDTO;
 import io.metersphere.track.dto.PlanReportIssueDTO;
 import io.metersphere.track.request.testcase.IssuesRequest;
 import org.apache.ibatis.annotations.Param;
@@ -31,4 +32,6 @@ public interface ExtIssuesMapper {
     List<IssuesDao> getPlanIssues(@Param("request") IssuesRequest issueRequest);
 
     int deleteIssues(@Param("issuesId") String issuesId, @Param("resourceId") String resourceId);
+
+    List<CustomFieldResourceCompatibleDTO> getForCompatibleCustomField(String projectId, int offset, int pageSize);
 }
