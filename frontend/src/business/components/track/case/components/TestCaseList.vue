@@ -259,7 +259,7 @@ import {
   getLastTableSortField,
   getPageInfo,
   getTableHeaderWithCustomFields,
-  initCondition,
+  initCondition, parseCustomFilesForList,
 } from "@/common/js/tableUtils";
 import HeaderLabelOperate from "@/business/components/common/head/HeaderLabelOperate";
 import PlanStatusTableItem from "@/business/components/track/common/tableItems/plan/PlanStatusTableItem";
@@ -651,18 +651,14 @@ export default {
     },
     getCustomFieldValue(row, field) {
       let value = getCustomFieldValue(row, field, this.members);
-      if (!value) {
-        if (field.name === '用例等级') {
-          return row.priority;
-        }
-        if (field.name === '责任人') {
-          return row.maintainer;
-        }
-        if (field.name === '用例状态') {
-          return row.status;
-        }
+      if (field.name === '用例等级') {
+        return row.priority;
+      } else if (field.name === '责任人') {
+        return row.maintainer;
+      } else if (field.name === '用例状态') {
+        return row.status;
       }
-      return value;
+      return value ? value : '';
     },
     getCustomFieldFilter(field) {
       if (field.name === '用例等级') {
@@ -774,11 +770,7 @@ export default {
           let data = response.data;
           this.page.total = data.itemCount;
           this.page.data = data.listObject;
-          this.page.data.forEach(item => {
-            if (item.customFields) {
-              item.customFields = JSON.parse(item.customFields);
-            }
-          });
+          parseCustomFilesForList(this.page.data);
           parseTag(this.page.data);
         });
         this.$emit("getTrashList");
@@ -1051,10 +1043,14 @@ export default {
       param.customTemplateFieldId = form.type.slice(6);
       param.condition = this.condition;
       param.customField = {
-        id: form.customField.id,
+        fieldId: form.customField.id,
         name: form.customField.name,
-        value: form.customField.defaultValue
       };
+      if (form.customField.type && (form.customField.type === 'richText' || form.customField.type === 'textarea')) {
+        param.customField.textValue = form.customField.defaultValue;
+      } else {
+        param.customField.value = JSON.stringify(form.customField.defaultValue ? form.customField.defaultValue : '');
+      }
       this.$post('/test/case/batch/edit', param, () => {
         this.$success(this.$t('commons.save_success'));
         this.refresh();

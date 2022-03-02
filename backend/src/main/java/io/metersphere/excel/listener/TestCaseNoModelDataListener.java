@@ -417,8 +417,9 @@ public class TestCaseNoModelDataListener extends AnalysisEventListener<Map<Integ
         }
         data.setStatus(caseStatusValue);
 
-        String customFieldsJson = this.getCustomFieldsJson(data);
-        testCase.setCustomFields(customFieldsJson);
+        // todo 这里要获取模板的自定义字段再新建关联关系
+//        String customFieldsJson = this.getCustomFieldsJson(data);
+//        testCase.setCustomFields(customFieldsJson);
         if (StringUtils.isNotBlank(data.getMaintainer())) {
             testCase.setMaintainer(data.getMaintainer());
         }
@@ -470,8 +471,9 @@ public class TestCaseNoModelDataListener extends AnalysisEventListener<Map<Integ
         }
         data.setStatus(caseStatusValue);
 
-        String customFieldsJson = this.getCustomFieldsJson(data);
-        testCase.setCustomFields(customFieldsJson);
+        // todo
+//        String customFieldsJson = this.getCustomFieldsJson(data);
+//        testCase.setCustomFields(customFieldsJson);
         if (StringUtils.isNotBlank(data.getMaintainer())) {
             testCase.setMaintainer(data.getMaintainer());
         }
