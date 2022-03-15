@@ -282,6 +282,7 @@ import {editTestCaseOrder} from "@/network/testCase";
 import {getGraphByCondition} from "@/network/graph";
 import MsTableAdvSearchBar from "@/business/components/common/components/search/MsTableAdvSearchBar";
 import ListItemDeleteConfirm from "@/business/components/common/components/ListItemDeleteConfirm";
+import {getAdvSearchCustomField} from "@/business/components/common/components/search/custom-component";
 
 const requireComponent = require.context('@/business/components/xpack/', true, /\.vue$/);
 const relationshipGraphDrawer = requireComponent.keys().length > 0 ? requireComponent("./graph/RelationshipGraphDrawer.vue") : {};
@@ -329,7 +330,8 @@ export default {
       isMoveBatch: true,
       condition: {
         components: TEST_CASE_CONFIGS,
-        filters: {}
+        filters: {},
+        custom: true,
       },
       versionFilters: [],
       graphData: {},
@@ -627,6 +629,9 @@ export default {
         this.page.result.loading = true;
         this.testCaseTemplate = template;
         this.fields = getTableHeaderWithCustomFields('TRACK_TEST_CASE', this.testCaseTemplate.customFields);
+        // todo 处理高级搜索自定义字段部分
+        let comp = getAdvSearchCustomField(this.condition.components, this.testCaseTemplate.customFields);
+        this.condition.components.push(...comp);
         this.setTestCaseDefaultValue(template);
         this.page.result.loading = false;
         if (this.$refs.table) {
